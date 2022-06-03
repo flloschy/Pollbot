@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "bot": "node main.js"
+  },
+  "dependencies": {
+    "@discordjs/builders": "^0.13.0",
+    "@discordjs/rest": "^0.4.1",
+    "colors": "^1.4.0",
+    "discord.js": "^13.7.0"
+  }
+}
