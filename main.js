@@ -19,11 +19,8 @@ client.once(
             client.commands.set(command.data.name, command);
         });
 
-        // uncomment to delete all commands
-
-        // client.application.commands.set([])
-        // const guild = await client.guilds.fetch("917794710851035167")
-        // guild.commands.set([])
+        // set client presence
+        await client.user.setPresence({activities: [{name: 'with polls', type: 'PLAYING'}], status: 'online'});
 
         const autoend = require("./data/functions/autoend");
         autoend.start(client); //start the loop which ends polls
