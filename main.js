@@ -3,6 +3,8 @@ const client = new Client({
     intents: ["GUILDS", "GUILD_MESSAGES", "DIRECT_MESSAGES"],
 });
 const fs = require("fs");
+const config = require("./config.json")
+
 
 require("./data/functions/commandpush");
 
@@ -21,8 +23,8 @@ client.once(
 
         // set client presence
         await client.user.setPresence({
-            activities: [{ name: "with polls", type: "PLAYING" }],
-            status: "online",
+            activities: [{ name: config['presence']['text'], type: config['presence']['type'] }],
+            status: config['presence']['status'],
         });
 
         const autoend = require("./data/functions/autoend");
@@ -45,4 +47,4 @@ client.on("interactionCreate", async (interaction) => {
 // client.on('guildDelete',
 //     async (guild) => event.guildDelete(client, guild))
 
-client.login(require("./config.json").token);
+client.login(config.token);
