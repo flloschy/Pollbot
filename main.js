@@ -20,7 +20,10 @@ client.once(
         });
 
         // set client presence
-        await client.user.setPresence({activities: [{name: 'with polls', type: 'PLAYING'}], status: 'online'});
+        await client.user.setPresence({
+            activities: [{ name: "with polls", type: "PLAYING" }],
+            status: "online",
+        });
 
         const autoend = require("./data/functions/autoend");
         autoend.start(client); //start the loop which ends polls
