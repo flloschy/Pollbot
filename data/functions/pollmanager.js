@@ -39,7 +39,6 @@ module.exports = {
                     " end <t:" + // ---
                     end + // create end timestamp
                     ":R>.\n" + // ---
-
                     "[i] Poll started at <t:" + // ---
                     Math.floor(Date.now() / 1000) + // create start timestamp
                     ":f>." // ---
@@ -47,7 +46,8 @@ module.exports = {
             .setFooter({ text: `id: ${id}`, iconURL: null });
 
         var select_options = [
-            { // hardcoded first option to be able to remove users votes
+            {
+                // hardcoded first option to be able to remove users votes
                 label: "#0",
                 description: "I abstain / I want to remove my vote",
                 value: "-1",
@@ -56,8 +56,11 @@ module.exports = {
 
         // for each option, add it to embed
         options.forEach(async (value, i, a) => {
-            embed.addField(`**#${i + 1}**: *__${value}__*`, "Votes: **0**");
-            
+            embed.addField(
+                `**#${i + 1}**: *__${value}__*`,
+                "Votes: **0** [░░░░░░░░░░]"
+            );
+
             // prepare option for select menu
             select_options.push({
                 label: `#${i + 1}`,
@@ -85,6 +88,7 @@ module.exports = {
             title: title.toString(),
             description: description.toString(),
             options: options,
+            voters: 0,
             votes: {},
             min: min,
             max: max,
@@ -123,6 +127,8 @@ module.exports = {
             return;
         }
 
+        polljson[interaction.guild.id][id]["voters"] = 0;
+
         if (votes.includes(-1)) {
             delete polljson[interaction.guild.id][id]["votes"][
                 interaction.user.id
@@ -136,6 +142,12 @@ module.exports = {
                 votes;
         }
 
+        for (var [user, uvotes] of Object.entries(
+            polljson[interaction.guild.id][id]["votes"]
+        )) {
+            polljson[interaction.guild.id][id]["voters"] += uvotes.length;
+        }
+
         msg.embeds[0].fields.forEach(async (value, i, a) => {
             let votes = 0;
             for (var [user, uvotes] of Object.entries(
@@ -143,8 +155,21 @@ module.exports = {
             ))
                 if (uvotes.includes(i.toString())) votes++;
 
-            msg.embeds[0].fields[i].value = "Votes: **" + votes + "**";
+            let full = Math.floor(
+                (votes / polljson[interaction.guild.id][id]["voters"]) * 10
+            );
+            let empty = 10 - full;
+
+            msg.embeds[0].fields[i].value =
+                "Votes: **" +
+                votes +
+                "** [" +
+                "█".repeat(full) +
+                "░".repeat(empty) +
+                "]";
         });
+
+        console.log();
 
         await msg.edit({
             embeds: [msg.embeds[0]],
