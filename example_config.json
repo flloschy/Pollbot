@@ -1,0 +1,11 @@
+{
+    "token": "",
+    "id": "",
+    "owner": "",
+    "presence": {
+     "automated": true,
+     "text": "your polls",
+     "type": "WATCHING",
+     "status": "dnd"
+    }
+   }
