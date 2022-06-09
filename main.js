@@ -34,11 +34,11 @@ client.once(
 client.on("interactionCreate", async (interaction) => {
     if (interaction.isCommand()) {
         const command = client.commands.get(interaction.commandName);
-        if (command) await command.command(interaction); // execute manager of the command
+        if (command) try {await command.command(interaction);} catch (e) {console.log(e)} // execute manager of the command
     } else if (interaction.isSelectMenu()) {
         if (interaction.customId === "poll") {
             const command = client.commands.get("poll");
-            if (command) await command.menu(interaction);
+            if (command) try {await command.menu(interaction);} catch (e) {console.log(e)} // execute manager of the select menu
         }
     }
 });
