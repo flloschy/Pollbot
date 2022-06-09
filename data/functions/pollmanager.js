@@ -231,12 +231,22 @@ module.exports = {
         if (resultsoverwrite !== undefined)
             polljson[guildid][id]["results"] = resultsoverwrite;
 
-        let channel = await client.channels.cache.get(
-            polljson[guildid][id]["channel"]
-        );
-        let msg = await channel.messages.fetch(
-            polljson[guildid][id]["message"]
-        );
+        try {
+            let channel = await client.channels.cache.get(
+                polljson[guildid][id]["channel"]
+            );
+            let msg = await channel.messages.fetch(
+                polljson[guildid][id]["message"]
+            );
+        } catch (e) {
+            console.log(e);
+            delete polljson[guildid][id];
+            await fs.writeFileSync(
+                "./data/commands/poll/polls.json",
+                JSON.stringify(polljson, null, 2)
+            );
+            return;
+        }
 
         let maxvotes = 0;
         let duplicates = [];
