@@ -232,10 +232,10 @@ module.exports = {
             polljson[guildid][id]["results"] = resultsoverwrite;
 
         try {
-            let channel = await client.channels.cache.get(
+            var channel = await client.channels.cache.get(
                 polljson[guildid][id]["channel"]
             );
-            let msg = await channel.messages.fetch(
+            var msg = await channel.messages.fetch(
                 polljson[guildid][id]["message"]
             );
         } catch (e) {
